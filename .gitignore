@@ -1,0 +1,7 @@
+# ignore python virtual environment
+.venv
+
+# ignore other development files
+.mypy.ini
+*.pyc
+__pycache__
