@@ -1,5 +1,6 @@
-from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QFrame, QLabel, QPushButton, QVBoxLayout
+from PySide6.QtCore import Qt, Slot
+from PySide6.QtWidgets import (QFileDialog, QFrame, QLabel, QPushButton,
+                               QVBoxLayout)
 
 
 class OpenView(QFrame):
@@ -8,8 +9,8 @@ class OpenView(QFrame):
 
         layout = QVBoxLayout()
 
-        self.open_button = QPushButton("Open")
-        self.open_button.setDefault(True)
+        open_button = QPushButton("Open")
+        open_button.setDefault(True)
 
         drop_label = QLabel("<b>Drag and drop<b>")
         drop_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -20,7 +21,7 @@ class OpenView(QFrame):
         layout.addStretch()
         layout.addWidget(drop_label)
         layout.addWidget(or_label)
-        layout.addWidget(self.open_button)
+        layout.addWidget(open_button)
         layout.addStretch()
 
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -29,3 +30,19 @@ class OpenView(QFrame):
         self.setLayout(layout)
         self.setFrameStyle(QFrame.StyledPanel)
         self.setContentsMargins(10, 10, 10, 10)
+
+        open_button.clicked.connect(self.open_file_dialog)
+
+    @Slot()
+    def open_file_dialog(self) -> None:
+        dialog = QFileDialog()
+        dialog.setFileMode(QFileDialog.ExistingFile)
+        dialog.setMimeTypeFilters(
+            [
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "application/octet-stream",
+            ],
+        )
+        if dialog.exec():
+            urls = dialog.selectedFiles()
+            print(urls)

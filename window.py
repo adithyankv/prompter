@@ -17,8 +17,6 @@ class MainWindow(QMainWindow):
         self.open_view = OpenView()
         self.prompt_view = PromptView()
 
-        self.open_view.open_button.clicked.connect(self.change_views)
-
         self.stack.addWidget(self.open_view)
         self.stack.addWidget(self.prompt_view)
 
