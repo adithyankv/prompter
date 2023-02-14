@@ -3,6 +3,8 @@ from PySide6.QtWidgets import (QHBoxLayout, QLabel, QPushButton, QVBoxLayout,
                                QWidget)
 
 from prompts_model import PromptList
+from record_stop_button import RecordStopButton
+from redo_button import RedoButton
 
 
 class PromptView(QWidget):
@@ -13,9 +15,13 @@ class PromptView(QWidget):
         self.prompt_label = QLabel()
         self.next_button = QPushButton("Next")
         self.prev_button = QPushButton("Prev")
+        self.record_stop_button = RecordStopButton()
+        self.redo_button = RedoButton()
         buttons_box = QHBoxLayout()
+        buttons_box.addWidget(self.record_stop_button)
         buttons_box.addWidget(self.prev_button)
         buttons_box.addWidget(self.next_button)
+        buttons_box.addWidget(self.redo_button)
 
         self.update_prompt()
         self.prompt_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
