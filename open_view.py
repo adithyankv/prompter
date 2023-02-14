@@ -1,10 +1,14 @@
-from PySide6.QtCore import Qt, Slot
+import mimetypes
+
+from PySide6.QtCore import Qt, Signal, Slot
 from PySide6.QtGui import QDragEnterEvent, QDropEvent
 from PySide6.QtWidgets import (QFileDialog, QFrame, QLabel, QPushButton,
                                QVBoxLayout)
 
 
 class OpenView(QFrame):
+    file_selected = Signal(str)
+
     def __init__(self) -> None:
         super().__init__()
         self.setAcceptDrops(True)
@@ -47,7 +51,9 @@ class OpenView(QFrame):
         )
         if dialog.exec():
             urls = dialog.selectedFiles()
-            print(urls)
+            url = urls[0]
+            print(f"Selected file {url} with file picker")
+            self.file_selected.emit(url)
 
     def dragEnterEvent(self, event: QDragEnterEvent) -> None:
         if event.mimeData().hasUrls():
@@ -59,4 +65,5 @@ class OpenView(QFrame):
             print("Can only accept single file")
             return
         url = urls[0].path()
-        print(url)
+        print(f"Recieved drop file {url}")
+        self.file_selected.emit(url)
