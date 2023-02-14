@@ -17,6 +17,7 @@ class PromptView(QWidget):
         self.prev_button = QPushButton("Prev")
         self.record_stop_button = RecordStopButton()
         self.redo_button = RedoButton()
+        self.finish_button = QPushButton("Finish")
         buttons_box = QHBoxLayout()
         buttons_box.addWidget(self.record_stop_button)
         buttons_box.addWidget(self.prev_button)
@@ -27,9 +28,17 @@ class PromptView(QWidget):
         self.prompt_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         layout = QVBoxLayout()
-        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        # layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        layout.addStretch()
         layout.addWidget(self.prompt_label)
         layout.addLayout(buttons_box)
+        layout.addStretch()
+
+        finish_box = QHBoxLayout()
+        finish_box.addWidget(self.finish_button)
+        finish_box.setAlignment(Qt.AlignmentFlag.AlignRight)
+        layout.addLayout(finish_box)
 
         self.next_button.clicked.connect(self.next_prompt)
         self.prev_button.clicked.connect(self.prev_prompt)
