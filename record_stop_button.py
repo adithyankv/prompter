@@ -1,7 +1,7 @@
 from enum import Enum, auto
 from pathlib import Path
 
-from PySide6.QtCore import Slot
+from PySide6.QtCore import Signal, Slot
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QPushButton
 
@@ -22,8 +22,10 @@ class RecordStopButton(QPushButton):
     def update_icon(self) -> None:
         if self.state == ButtonState.RECORD:
             self.setIcon(self.record_icon)
+            self.setToolTip("Start recording")
         else:
             self.setIcon(self.stop_icon)
+            self.setToolTip("Stop")
 
     @Slot()
     def toggle_state(self) -> None:
