@@ -9,5 +9,5 @@ class RedoButton(QPushButton):
         super().__init__()
 
         redo_icon = QIcon()
-        redo_icon.addFile("resources/repeat.svg")
+        redo_icon.addFile("resources/icons/repeat.svg")
         self.setIcon(redo_icon)

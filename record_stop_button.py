@@ -12,9 +12,9 @@ class RecordStopButton(QPushButton):
         self.state = ButtonState.RECORD
 
         self.record_icon = QIcon()
-        self.record_icon.addFile("resources/record.svg")
+        self.record_icon.addFile("resources/icons/record.svg")
         self.stop_icon = QIcon()
-        self.stop_icon.addFile("resources/stop.svg")
+        self.stop_icon.addFile("resources/icons/stop.svg")
 
         self.clicked.connect(self.toggle_state)
         self.update_icon()
