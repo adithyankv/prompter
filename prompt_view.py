@@ -13,39 +13,10 @@ class PromptView(QWidget):
     def __init__(self, prompts: PromptList) -> None:
         super().__init__()
         self._is_recording = False
-
         self.prompts = prompts
-        self.prompt_label = QLabel()
-        self.next_button = QPushButton("Next")
-        self.prev_button = QPushButton("Prev")
-        self.record_stop_button = RecordStopButton()
-        self.redo_button = RedoButton()
-        self.finish_button = QPushButton("Finish")
-        buttons_box = QHBoxLayout()
-        buttons_box.addWidget(self.record_stop_button)
-        buttons_box.addWidget(self.prev_button)
-        buttons_box.addWidget(self.next_button)
-        buttons_box.addWidget(self.redo_button)
 
-        self.next_button.setToolTip("Next prompt")
-        self.prev_button.setToolTip("Previous prompt")
-        self.redo_button.setToolTip("Redo last")
-        self.finish_button.setToolTip("Finish recording")
-
-        self.update_prompt()
-        self.prompt_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        layout = QVBoxLayout()
-
-        layout.addStretch()
-        layout.addWidget(self.prompt_label)
-        layout.addLayout(buttons_box)
-        layout.addStretch()
-
-        finish_box = QHBoxLayout()
-        finish_box.addWidget(self.finish_button)
-        finish_box.setAlignment(Qt.AlignmentFlag.AlignRight)
-        layout.addLayout(finish_box)
+        self.create_layout()
+        self.update_ui()
 
         self.next_button.clicked.connect(self.next_prompt)
         self.prev_button.clicked.connect(self.prev_prompt)
@@ -54,8 +25,40 @@ class PromptView(QWidget):
         self.prompts.active_prompt_changed.connect(self.update_ui)
         self.recording_state_changed.connect(self.update_ui)
 
+    def create_layout(self) -> None:
+        self.prompt_label = QLabel()
+        self.next_button = QPushButton("Next")
+        self.prev_button = QPushButton("Prev")
+        self.record_stop_button = RecordStopButton()
+        self.redo_button = RedoButton()
+        self.finish_button = QPushButton("Finish")
+
+        self.next_button.setToolTip("Next prompt")
+        self.prev_button.setToolTip("Previous prompt")
+        self.redo_button.setToolTip("Redo last")
+        self.finish_button.setToolTip("Finish recording")
+
+        self.prompt_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        buttons_box = QHBoxLayout()
+        finish_box = QHBoxLayout()
+        layout = QVBoxLayout()
+
+        buttons_box.addWidget(self.record_stop_button)
+        buttons_box.addWidget(self.prev_button)
+        buttons_box.addWidget(self.next_button)
+        buttons_box.addWidget(self.redo_button)
+
+        finish_box.addWidget(self.finish_button)
+        finish_box.setAlignment(Qt.AlignmentFlag.AlignRight)
+
+        layout.addStretch()
+        layout.addWidget(self.prompt_label)
+        layout.addLayout(buttons_box)
+        layout.addStretch()
+
+        layout.addLayout(finish_box)
         self.setLayout(layout)
-        self.update_buttons()
 
     @Slot()
     def update_ui(self) -> None:
