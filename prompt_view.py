@@ -1,4 +1,4 @@
-from PySide6.QtCore import Qt, Slot
+from PySide6.QtCore import Qt, Signal, Slot
 from PySide6.QtWidgets import (QHBoxLayout, QLabel, QPushButton, QVBoxLayout,
                                QWidget)
 
@@ -8,8 +8,11 @@ from redo_button import RedoButton
 
 
 class PromptView(QWidget):
+    recording_state_changed = Signal()
+
     def __init__(self, prompts: PromptList) -> None:
         super().__init__()
+        self._is_recording = False
 
         self.prompts = prompts
         self.prompt_label = QLabel()
@@ -33,7 +36,6 @@ class PromptView(QWidget):
         self.prompt_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         layout = QVBoxLayout()
-        # layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         layout.addStretch()
         layout.addWidget(self.prompt_label)
@@ -47,24 +49,45 @@ class PromptView(QWidget):
 
         self.next_button.clicked.connect(self.next_prompt)
         self.prev_button.clicked.connect(self.prev_prompt)
-        self.prompts.active_prompt_changed.connect(self.update_prompt)
-        self.prompts.active_prompt_changed.connect(self.update_nav_buttons)
+        self.record_stop_button.clicked.connect(self.toggle_recording_state)
+
+        self.prompts.active_prompt_changed.connect(self.update_ui)
+        self.recording_state_changed.connect(self.update_ui)
 
         self.setLayout(layout)
-        self.update_nav_buttons()
+        self.update_buttons()
+
+    @Slot()
+    def update_ui(self) -> None:
+        self.update_prompt()
+        self.update_buttons()
 
     def update_prompt(self) -> None:
         self.prompt_label.setText(f"<h1>{self.prompts.active_prompt.text}<h1>")
 
-    def update_nav_buttons(self) -> None:
-        if self.prompts.active_prompt_index == len(self.prompts) - 1:
-            self.next_button.setDisabled(True)
-        else:
-            self.next_button.setEnabled(True)
-        if self.prompts.active_prompt_index == 0:
-            self.prev_button.setDisabled(True)
-        else:
-            self.prev_button.setEnabled(True)
+    def update_buttons(self) -> None:
+        self.finish_button.setDisabled(self.is_recording)
+        self.redo_button.setDisabled(self.is_recording)
+
+        is_last_prompt = self.prompts.active_prompt_index == len(self.prompts) - 1
+        is_first_prompt = self.prompts.active_prompt_index == 0
+        self.next_button.setDisabled(self.is_recording or is_last_prompt)
+        self.prev_button.setDisabled(self.is_recording or is_first_prompt)
+
+    @property
+    def is_recording(self) -> bool:
+        return self._is_recording
+
+    @is_recording.setter
+    def is_recording(self, value: bool):
+        if value == self._is_recording:
+            return
+        self._is_recording = value
+        self.recording_state_changed.emit()
+
+    @Slot()
+    def toggle_recording_state(self) -> None:
+        self.is_recording = not self.is_recording
 
     @Slot()
     def next_prompt(self) -> None:
