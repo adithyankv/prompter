@@ -23,7 +23,7 @@ class TimestampLogger:
             "start": round(start_time, 3),
             "end": round(end_time, 3),
             "start_timestamp": self.format_timestamp(start_time),
-            "end_timestamp": self.format_timestamp(start_time),
+            "end_timestamp": self.format_timestamp(end_time),
         }
 
     def finish_logging(self) -> None:
