@@ -1,3 +1,6 @@
+from pathlib import Path
+
+from playsound import playsound
 from PySide6.QtCore import Qt, Signal, Slot
 from PySide6.QtWidgets import (QHBoxLayout, QLabel, QPushButton, QVBoxLayout,
                                QWidget)
@@ -5,6 +8,7 @@ from PySide6.QtWidgets import (QHBoxLayout, QLabel, QPushButton, QVBoxLayout,
 from prompts_model import PromptList
 from record_stop_button import ButtonState, RecordStopButton
 from redo_button import RedoButton
+from timestamp_logger import TimestampLogger
 
 
 class PromptView(QWidget):
@@ -14,13 +18,16 @@ class PromptView(QWidget):
         super().__init__()
         self._is_recording = False
         self.prompts = prompts
+        self.recording_session_started = False
+        self.timestamp_logger = TimestampLogger()
 
         self.create_layout()
         self.update_ui()
 
         self.next_button.clicked.connect(self.next_prompt)
         self.prev_button.clicked.connect(self.prev_prompt)
-        self.record_stop_button.clicked.connect(self.toggle_recording_state)
+        self.record_stop_button.clicked.connect(self.on_record_button_clicked)
+        self.finish_button.clicked.connect(self.on_finish_button_clicked)
 
         self.prompts.active_prompt_changed.connect(self.update_ui)
         self.recording_state_changed.connect(self.update_ui)
@@ -59,6 +66,34 @@ class PromptView(QWidget):
 
         layout.addLayout(finish_box)
         self.setLayout(layout)
+
+    @Slot()
+    def on_record_button_clicked(self) -> None:
+        if not self.recording_session_started:
+            self.recording_session_started = True
+            self.timestamp_logger.start_logging()
+
+        if not self.is_recording:
+            self.timestamp_logger.active_prompt = self.prompts.active_prompt
+            # cue should be played before logging timestamp to avoid cue being
+            # part of recording
+            self.play_cue()
+            self.timestamp_logger.log_start()
+        else:
+            # cue should be played after logging timestamp to avoid cue being
+            # part of recording
+            self.timestamp_logger.log_end()
+            self.play_cue()
+        self.toggle_recording_state()
+
+    @Slot()
+    def on_finish_button_clicked(self) -> None:
+        self.timestamp_logger.finish_logging()
+        self.recording_session_started = False
+
+    @Slot()
+    def play_cue(self) -> None:
+        playsound(Path("resources", "sounds", "beep.wav"))
 
     @Slot()
     def update_ui(self) -> None:
