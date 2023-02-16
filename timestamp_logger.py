@@ -1,3 +1,4 @@
+import json
 import time
 
 from prompts_model import Prompt
@@ -32,7 +33,12 @@ class TimestampLogger:
         self.logged_prompts.remove(prompt)
 
     def finish_logging(self) -> None:
-        print(self.timestamps)
+        print("logged timestamps")
+        print(json.dumps(self.timestamps))
+
+    def save_to_file(self, path: str) -> None:
+        with open(path, "w") as fout:
+            fout.write(json.dumps(self.timestamps, indent=4))
 
     def format_timestamp(self, time: float) -> str:
         minutes, seconds = int(time // 60), time % 60

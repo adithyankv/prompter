@@ -1,10 +1,11 @@
 from pathlib import Path
+from typing import Optional
 
 from playsound import playsound
 from PySide6.QtCore import Qt, Signal, Slot
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import (QHBoxLayout, QLabel, QPushButton, QVBoxLayout,
-                               QWidget)
+from PySide6.QtWidgets import (QFileDialog, QHBoxLayout, QLabel, QPushButton,
+                               QVBoxLayout, QWidget)
 
 from prompts_model import PromptList
 from timestamp_logger import TimestampLogger
@@ -99,7 +100,20 @@ class PromptView(QWidget):
     @Slot()
     def on_finish_button_clicked(self) -> None:
         self.timestamp_logger.finish_logging()
-        self.recording_session_started = False
+        filename = self.run_save_dialog()
+        if filename:
+            save_file_path = f"{filename}.timestamps"
+            print(save_file_path)
+            self.timestamp_logger.save_to_file(save_file_path)
+
+    def run_save_dialog(self) -> Optional[str]:
+        save_dialog = QFileDialog()
+        save_dialog.setFileMode(QFileDialog.AnyFile)
+        save_dialog.setAcceptMode(QFileDialog.AcceptSave)
+        if save_dialog.exec():
+            output_file_name = save_dialog.selectedFiles()[0]
+            return output_file_name
+        return None
 
     @Slot()
     def on_redo_button_clicked(self) -> None:
