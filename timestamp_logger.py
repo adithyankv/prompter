@@ -7,10 +7,10 @@ class TimestampLogger:
     def __init__(self) -> None:
         self.timestamps: dict[str, dict] = dict()
         self.active_prompt: Prompt
+        self.logged_prompts: set[Prompt] = set()
 
     def start_logging(self) -> None:
         self.session_start_time = time.time()
-        print(self.session_start_time)
 
     def log_start(self) -> None:
         self.active_prompt_recording_start = time.time()
@@ -25,6 +25,11 @@ class TimestampLogger:
             "start_timestamp": self.format_timestamp(start_time),
             "end_timestamp": self.format_timestamp(end_time),
         }
+        self.logged_prompts.add(self.active_prompt)
+
+    def remove_log(self, prompt: Prompt) -> None:
+        del self.timestamps[self.active_prompt.id]
+        self.logged_prompts.remove(prompt)
 
     def finish_logging(self) -> None:
         print(self.timestamps)

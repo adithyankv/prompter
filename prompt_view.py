@@ -27,8 +27,9 @@ class PromptView(QWidget):
         self.prev_button.clicked.connect(self.prev_prompt)
         self.record_stop_button.clicked.connect(self.on_record_button_clicked)
         self.finish_button.clicked.connect(self.on_finish_button_clicked)
+        self.redo_button.clicked.connect(self.on_redo_button_clicked)
 
-        self.prompts.active_prompt_changed.connect(self.update_ui)
+        self.prompts.active_prompt_changed.connect(self.on_prompt_changed)
         self.recording_state_changed.connect(self.update_ui)
 
     def create_layout(self) -> None:
@@ -101,6 +102,10 @@ class PromptView(QWidget):
         self.recording_session_started = False
 
     @Slot()
+    def on_redo_button_clicked(self) -> None:
+        self.timestamp_logger.remove_log(self.prompts.active_prompt)
+        self.on_record_button_clicked()
+
     def play_cue(self) -> None:
         playsound(Path("resources", "sounds", "beep.wav"))
 
@@ -108,6 +113,11 @@ class PromptView(QWidget):
     def update_ui(self) -> None:
         self.update_prompt()
         self.update_buttons()
+
+    @Slot()
+    def on_prompt_changed(self) -> None:
+        self.timestamp_logger.active_prompt = self.prompts.active_prompt
+        self.update_ui()
 
     def update_prompt(self) -> None:
         self.prompt_label.setText(f"<h1>{self.prompts.active_prompt.text}<h1>")
@@ -120,6 +130,10 @@ class PromptView(QWidget):
         is_first_prompt = self.prompts.active_prompt_index == 0
         self.next_button.setDisabled(self.is_recording or is_last_prompt)
         self.prev_button.setDisabled(self.is_recording or is_first_prompt)
+
+        is_logged = self.prompts.active_prompt in self.timestamp_logger.logged_prompts
+        self.record_stop_button.setDisabled(is_logged)
+        self.redo_button.setDisabled(not is_logged)
 
         if self.is_recording:
             self.record_stop_button.setIcon(self.stop_icon)
