@@ -2,12 +2,11 @@ from pathlib import Path
 
 from playsound import playsound
 from PySide6.QtCore import Qt, Signal, Slot
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (QHBoxLayout, QLabel, QPushButton, QVBoxLayout,
                                QWidget)
 
 from prompts_model import PromptList
-from record_stop_button import ButtonState, RecordStopButton
-from redo_button import RedoButton
 from timestamp_logger import TimestampLogger
 
 
@@ -36,13 +35,23 @@ class PromptView(QWidget):
         self.prompt_label = QLabel()
         self.next_button = QPushButton("Next")
         self.prev_button = QPushButton("Prev")
-        self.record_stop_button = RecordStopButton()
-        self.redo_button = RedoButton()
         self.finish_button = QPushButton("Finish")
+
+        self.redo_button = QPushButton()
+        redo_icon = QIcon()
+        redo_icon.addFile("resources/icons/repeat.svg")
+        self.redo_button.setIcon(redo_icon)
+
+        self.record_stop_button = QPushButton()
+        self.record_icon = QIcon()
+        self.record_icon.addFile("resources/icons/record.svg")
+        self.stop_icon = QIcon()
+        self.stop_icon.addFile("resources/icons/stop.svg")
+        self.record_stop_button.setIcon(self.record_icon)
 
         self.next_button.setToolTip("Next prompt")
         self.prev_button.setToolTip("Previous prompt")
-        self.redo_button.setToolTip("Redo last")
+        self.redo_button.setToolTip("Redo")
         self.finish_button.setToolTip("Finish recording")
 
         self.prompt_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -111,6 +120,11 @@ class PromptView(QWidget):
         is_first_prompt = self.prompts.active_prompt_index == 0
         self.next_button.setDisabled(self.is_recording or is_last_prompt)
         self.prev_button.setDisabled(self.is_recording or is_first_prompt)
+
+        if self.is_recording:
+            self.record_stop_button.setIcon(self.stop_icon)
+        else:
+            self.record_stop_button.setIcon(self.record_icon)
 
     @property
     def is_recording(self) -> bool:
