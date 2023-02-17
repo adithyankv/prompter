@@ -102,7 +102,7 @@ class PromptView(QWidget):
         self.timestamp_logger.finish_logging()
         filename = self.run_save_dialog()
         if filename:
-            save_file_path = f"{filename}.timestamps"
+            save_file_path = f"{filename}.json"
             print(save_file_path)
             self.timestamp_logger.save_to_file(save_file_path)
 
