@@ -1,3 +1,4 @@
+import html
 from pathlib import Path
 from typing import Optional
 
@@ -134,7 +135,9 @@ class PromptView(QWidget):
         self.update_ui()
 
     def update_prompt(self) -> None:
-        self.prompt_label.setText(f"<h1>{self.prompts.active_prompt.text}<h1>")
+        self.prompt_label.setText(
+            f"<h1>{html.escape(self.prompts.active_prompt.text)}<h1>"
+        )
 
     def update_buttons(self) -> None:
         self.finish_button.setDisabled(self.is_recording)

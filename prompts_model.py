@@ -65,9 +65,11 @@ class PromptList(QObject):
         sheet = workbook.active
 
         for row in sheet:
-            id, prompt = row
-            prompt = Prompt(id.value, prompt.value)
-            self.prompts.append(prompt)
+            if len(row) >= 2:
+                id, prompt = row[0], row[1]
+                print(id.value, prompt.value)
+                prompt = Prompt(id.value, prompt.value)
+                self.prompts.append(prompt)
 
 
 class MimeTypeError(Exception):
