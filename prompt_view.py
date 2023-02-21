@@ -2,7 +2,8 @@ import html
 from pathlib import Path
 from typing import Optional
 
-from playsound import playsound
+from pydub import AudioSegment
+from pydub.playback import play
 from PySide6.QtCore import Qt, Signal, Slot
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (QFileDialog, QHBoxLayout, QLabel, QPushButton,
@@ -126,7 +127,10 @@ class PromptView(QWidget):
         self.on_record_button_clicked()
 
     def play_cue(self) -> None:
-        playsound(Path("resources", "sounds", "beep.wav"))
+        root_path = Path(__file__).parent
+        cue_path = Path(root_path, "resources", "sounds", "beep.wav")
+        cue = AudioSegment.from_wav(str(cue_path))
+        play(cue)
 
     @Slot()
     def update_ui(self) -> None:
