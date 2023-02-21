@@ -7,7 +7,7 @@ block_cipher = None
 a = Analysis(
     ['app.py'],
     pathex=[],
-    binaries=[],
+    binaries=[('/usr/local/bin/ffplay', '.')],
     datas=[('resources/icons/*.svg', 'resources/icons'), ('resources/sounds/beep.wav', 'resources/sounds')],
     hiddenimports=[],
     hookspath=[],
@@ -31,7 +31,7 @@ exe = EXE(
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=True,
+    console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
@@ -47,4 +47,10 @@ coll = COLLECT(
     upx=True,
     upx_exclude=[],
     name='app',
+)
+app = BUNDLE(
+    coll,
+    name='app.app',
+    icon=None,
+    bundle_identifier=None,
 )

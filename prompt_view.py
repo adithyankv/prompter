@@ -7,7 +7,7 @@ from pydub.playback import play
 from PySide6.QtCore import Qt, Signal, Slot
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (QFileDialog, QHBoxLayout, QLabel, QPushButton,
-                               QVBoxLayout, QWidget)
+                               QVBoxLayout, QWidget, QMessageBox)
 
 from prompts_model import PromptList
 from timestamp_logger import TimestampLogger
@@ -101,6 +101,7 @@ class PromptView(QWidget):
             # part of recording
             self.timestamp_logger.log_end()
             self.play_cue()
+
         self.toggle_recording_state()
 
     @Slot()
