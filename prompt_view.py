@@ -39,17 +39,21 @@ class PromptView(QWidget):
         self.next_button = QPushButton("Next")
         self.prev_button = QPushButton("Prev")
         self.finish_button = QPushButton("Finish")
+        root_path = Path(__file__).parent
 
         self.redo_button = QPushButton()
         redo_icon = QIcon()
-        redo_icon.addFile("resources/icons/repeat.svg")
+        redo_icon_path = Path(root_path, "resources/icons/repeat.svg")
+        redo_icon.addFile(str(redo_icon_path.absolute()))
         self.redo_button.setIcon(redo_icon)
 
         self.record_stop_button = QPushButton()
         self.record_icon = QIcon()
-        self.record_icon.addFile("resources/icons/record.svg")
+        record_icon_path = Path(root_path, "resources/icons/record.svg")
+        self.record_icon.addFile(str(record_icon_path))
         self.stop_icon = QIcon()
-        self.stop_icon.addFile("resources/icons/stop.svg")
+        stop_icon_path = Path(root_path, "resources/icons/stop.svg")
+        self.stop_icon.addFile(str(stop_icon_path))
         self.record_stop_button.setIcon(self.record_icon)
 
         self.next_button.setToolTip("Next prompt")
