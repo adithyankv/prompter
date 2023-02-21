@@ -8,7 +8,7 @@ a = Analysis(
     ['app.py'],
     pathex=[],
     binaries=[],
-    datas=[('resources/icons/*.svg', 'resources/icons')],
+    datas=[('resources/icons/*.svg', 'resources/icons'), ('resources/sounds/beep.wav', 'resources/sounds')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
