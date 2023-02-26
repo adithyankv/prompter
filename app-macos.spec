@@ -51,7 +51,7 @@ coll = COLLECT(
 )
 app = BUNDLE(
     coll,
-    name='app.app',
+    name='prompter.app',
     icon='resources/icons/app_icons/app_icon.icns',
     bundle_identifier=None,
 )
