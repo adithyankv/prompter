@@ -67,7 +67,6 @@ class PromptList(QObject):
         for row in sheet:
             if len(row) >= 2:
                 id, prompt = row[0], row[1]
-                print(id.value, prompt.value)
                 prompt = Prompt(id.value, prompt.value)
                 self.prompts.append(prompt)
 
