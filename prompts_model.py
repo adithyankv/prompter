@@ -56,10 +56,10 @@ class PromptList(QObject):
         ]
         if not prompts_path.exists():
             print("Path doesn't exist")
-            return
+            raise FileNotFoundError(f"Spreadsheet not found {prompts_path}")
         mime_type = mimetypes.guess_type(prompts_path)[0]
         if mime_type not in spreadsheet_mimetypes:
-            raise MimeTypeError()
+            raise MimeTypeError("Invalid filetype for spreadsheet")
 
         workbook = openpyxl.load_workbook(prompts_path, read_only=True)
         sheet = workbook.active

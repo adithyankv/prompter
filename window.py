@@ -1,5 +1,8 @@
+import sys
+import traceback
+
 from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QMainWindow, QStackedWidget
+from PySide6.QtWidgets import QMainWindow, QMessageBox, QStackedWidget
 
 from open_view import OpenView
 from prompt_view import PromptView
@@ -24,10 +27,7 @@ class MainWindow(QMainWindow):
     @Slot()
     def load_prompts(self, url: str) -> None:
         prompts = PromptList()
-        try:
-            prompts.load_from_path(url)
-        except MimeTypeError as e:
-            return
+        prompts.load_from_path(url)
 
         self.prompt_view = PromptView(prompts)
         self.stack.addWidget(self.prompt_view)
