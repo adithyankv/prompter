@@ -23,7 +23,7 @@
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
      inkscape:zoom="16.708333"
-     inkscape:cx="24.059851"
+     inkscape:cx="22.743143"
      inkscape:cy="24"
      inkscape:window-width="1920"
      inkscape:window-height="1011"
@@ -34,5 +34,5 @@
   <path
      d="M 24,38 Q 18.25,38 14.125,33.875 10,29.75 10,24 10,18.25 14.125,14.125 18.25,10 24,10 29.75,10 33.875,14.125 38,18.25 38,24 38,29.75 33.875,33.875 29.75,38 24,38 Z"
      id="path49"
-     style="fill:#d40000" />
+     style="fill:#ff3b30;fill-opacity:1" />
 </svg>
