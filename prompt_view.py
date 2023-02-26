@@ -6,8 +6,8 @@ from pydub import AudioSegment
 from pydub.playback import play
 from PySide6.QtCore import Qt, Signal, Slot
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import (QFileDialog, QHBoxLayout, QLabel, QMessageBox,
-                               QPushButton, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QFileDialog, QHBoxLayout, QLabel, QPushButton,
+                               QVBoxLayout, QWidget)
 
 from prompts_model import PromptList
 from timestamp_logger import TimestampLogger
@@ -95,7 +95,6 @@ class PromptView(QWidget):
             # cue should be played before logging timestamp to avoid cue being
             # part of recording
             self.play_cue()
-            print("cue")
             self.timestamp_logger.log_start()
         else:
             # cue should be played after logging timestamp to avoid cue being
@@ -162,8 +161,10 @@ class PromptView(QWidget):
         self.redo_button.setDisabled(not is_logged)
 
         if self.is_recording:
+            self.record_stop_button.setToolTip("Stop")
             self.record_stop_button.setIcon(self.stop_icon)
         else:
+            self.record_stop_button.setToolTip("Record")
             self.record_stop_button.setIcon(self.record_icon)
 
     @property
