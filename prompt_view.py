@@ -125,7 +125,7 @@ class PromptView(QWidget):
     @Slot()
     def on_redo_button_clicked(self) -> None:
         self.timestamp_logger.remove_log(self.prompts.active_prompt)
-        self.on_record_button_clicked()
+        self.update_ui()
 
     def play_cue(self) -> None:
         root_path = Path(__file__).parent
