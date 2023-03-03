@@ -23,6 +23,7 @@ def on_exception(exception_type, exception_value, exception_traceback):
     logging.error(f"{exception_value}\n{error_message}")
     error_dialog = QMessageBox()
     error_message = "".join(traceback.format_tb(exception_traceback))
+    logging.error(f"{exception_value}\n{error_message}")
     error_dialog.setWindowModality(Qt.ApplicationModal)
     error_dialog.setWindowTitle("Oops, something went wrong!")
     error_dialog.setText(str(exception_value))
