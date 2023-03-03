@@ -15,6 +15,7 @@ from timestamp_logger import TimestampLogger
 
 class PromptView(QWidget):
     recording_state_changed = Signal()
+    logging_finished = Signal()
 
     def __init__(self, prompts: PromptList) -> None:
         super().__init__()
@@ -121,9 +122,10 @@ class PromptView(QWidget):
         self.timestamp_logger.finish_logging()
         filename = self.run_save_dialog()
         if filename:
-            save_file_path = f"{filename}.json"
+            save_file_path = f"{filename.strip('.json')}.json"
             print(save_file_path)
             self.timestamp_logger.save_to_file(save_file_path)
+            self.logging_finished.emit()
 
     def run_save_dialog(self) -> Optional[str]:
         save_dialog = QFileDialog()

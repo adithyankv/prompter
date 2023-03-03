@@ -30,5 +30,11 @@ class MainWindow(QMainWindow):
         prompts.load_from_path(url)
 
         self.prompt_view = PromptView(prompts)
+        self.prompt_view.logging_finished.connect(self.on_logging_finished)
+
         self.stack.addWidget(self.prompt_view)
         self.stack.setCurrentWidget(self.prompt_view)
+
+    @Slot()
+    def on_logging_finished(self) -> None:
+        self.stack.setCurrentWidget(self.open_view)
