@@ -5,9 +5,9 @@ from typing import Optional
 from pydub import AudioSegment
 from pydub.playback import play
 from PySide6.QtCore import Qt, Signal, Slot
-from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import (QFileDialog, QHBoxLayout, QLabel, QPushButton,
-                               QVBoxLayout, QWidget)
+from PySide6.QtGui import QIcon, QIntValidator
+from PySide6.QtWidgets import (QFileDialog, QHBoxLayout, QLabel, QLineEdit,
+                               QPushButton, QVBoxLayout, QWidget)
 
 from prompts_model import PromptList
 from timestamp_logger import TimestampLogger
@@ -31,6 +31,7 @@ class PromptView(QWidget):
         self.record_stop_button.clicked.connect(self.on_record_button_clicked)
         self.finish_button.clicked.connect(self.on_finish_button_clicked)
         self.redo_button.clicked.connect(self.on_redo_button_clicked)
+        self.index_entry.textChanged.connect(self.on_index_entry_changed)
 
         self.prompts.active_prompt_changed.connect(self.on_prompt_changed)
         self.recording_state_changed.connect(self.update_ui)
@@ -57,6 +58,16 @@ class PromptView(QWidget):
         self.stop_icon.addFile(str(stop_icon_path))
         self.record_stop_button.setIcon(self.record_icon)
 
+        index_box = QHBoxLayout()
+        self.index_entry = QLineEdit()
+        self.total_indices_label = QLabel(f"/{len(self.prompts)}")
+        index_validator = QIntValidator(0, len(self.prompts))
+        self.index_entry.setValidator(index_validator)
+
+        index_box.addWidget(self.index_entry)
+        index_box.addWidget(self.total_indices_label)
+        index_box.addStretch()
+
         self.next_button.setToolTip("Next prompt")
         self.prev_button.setToolTip("Previous prompt")
         self.redo_button.setToolTip("Redo")
@@ -80,6 +91,7 @@ class PromptView(QWidget):
         layout.addStretch()
         layout.addWidget(self.prompt_label)
         layout.addLayout(buttons_box)
+        layout.addLayout(index_box)
         layout.addStretch()
 
         layout.addLayout(finish_box)
@@ -137,6 +149,7 @@ class PromptView(QWidget):
     def update_ui(self) -> None:
         self.update_prompt()
         self.update_buttons()
+        self.update_index()
 
     @Slot()
     def on_prompt_changed(self) -> None:
@@ -147,6 +160,9 @@ class PromptView(QWidget):
         self.prompt_label.setText(
             f"<h1>{html.escape(self.prompts.active_prompt.text)}<h1>"
         )
+
+    def update_index(self) -> None:
+        self.index_entry.setText(str(self.prompts.active_prompt_index))
 
     def update_buttons(self) -> None:
         self.finish_button.setDisabled(self.is_recording)
@@ -167,6 +183,12 @@ class PromptView(QWidget):
         else:
             self.record_stop_button.setToolTip("Record")
             self.record_stop_button.setIcon(self.record_icon)
+
+    @Slot()
+    def on_index_entry_changed(self) -> None:
+        entry = self.index_entry.text()
+        if entry:
+            self.prompts.active_prompt_index = int(entry)
 
     @property
     def is_recording(self) -> bool:

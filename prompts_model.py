@@ -49,6 +49,9 @@ class PromptList(QObject):
     def previous(self) -> None:
         self.active_prompt_index -= 1
 
+    def to_index(self, index: int) -> None:
+        self.active_prompt_index = index
+
     def load_from_path(self, url: str):
         prompts_path = Path(url)
         spreadsheet_mimetypes = [
