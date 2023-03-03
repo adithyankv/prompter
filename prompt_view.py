@@ -169,6 +169,7 @@ class PromptView(QWidget):
         )
 
     def update_index(self) -> None:
+        self.index_entry.setDisabled(self.is_recording)
         self.index_entry.setText(str(self.prompts.active_prompt_index))
 
     def update_buttons(self) -> None:
