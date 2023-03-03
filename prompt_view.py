@@ -63,6 +63,7 @@ class PromptView(QWidget):
         self.finish_button.setToolTip("Finish recording")
 
         self.prompt_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.prompt_label.setWordWrap(True)
 
         buttons_box = QHBoxLayout()
         finish_box = QHBoxLayout()
