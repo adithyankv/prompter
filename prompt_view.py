@@ -6,8 +6,9 @@ from pydub import AudioSegment
 from pydub.playback import play
 from PySide6.QtCore import Qt, Signal, Slot
 from PySide6.QtGui import QIcon, QIntValidator
-from PySide6.QtWidgets import (QFileDialog, QHBoxLayout, QLabel, QLineEdit,
-                               QPushButton, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QFileDialog, QFrame, QHBoxLayout, QLabel,
+                               QLineEdit, QPushButton, QScrollArea,
+                               QVBoxLayout, QWidget)
 
 from prompts_model import PromptList
 from timestamp_logger import TimestampLogger
@@ -74,8 +75,12 @@ class PromptView(QWidget):
         self.redo_button.setToolTip("Redo")
         self.finish_button.setToolTip("Finish recording")
 
+        scroll_area = QScrollArea()
         self.prompt_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.prompt_label.setWordWrap(True)
+        scroll_area.setWidget(self.prompt_label)
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setFrameStyle(QFrame.NoFrame)
 
         buttons_box = QHBoxLayout()
         finish_box = QHBoxLayout()
@@ -90,7 +95,7 @@ class PromptView(QWidget):
         finish_box.setAlignment(Qt.AlignmentFlag.AlignRight)
 
         layout.addStretch()
-        layout.addWidget(self.prompt_label)
+        layout.addWidget(scroll_area)
         layout.addLayout(buttons_box)
         layout.addLayout(index_box)
         layout.addStretch()
