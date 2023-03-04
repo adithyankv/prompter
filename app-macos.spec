@@ -7,7 +7,7 @@ block_cipher = None
 a = Analysis(
     ['app.py'],
     pathex=[],
-    binaries=[],
+    binaries=[('/usr/local/bin/ffplay', '.')],
     datas=[('resources/icons/*.svg', 'resources/icons'), ('resources/sounds/beep.wav', 'resources/sounds')],
     hiddenimports=[],
     hookspath=[],
