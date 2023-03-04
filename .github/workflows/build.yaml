@@ -12,6 +12,8 @@ jobs:
       with:
         python-version: "3.10"
 
+    - run: brew install ffmpeg
+    - run: which ffplay
     - run: pip install -r requirements.txt pyinstaller
     - run: pyinstaller app-macos.spec
     - run: zip dist/prompter.app ./* -r
