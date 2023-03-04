@@ -16,7 +16,7 @@ jobs:
     - run: which ffplay
     - run: pip install -r requirements.txt pyinstaller
     - run: pyinstaller app-macos.spec
-    - run: zip -r dist/prompter.app
+    - run: zip -r dist/prompter.app.zip dist/prompter.app
     - uses: actions/upload-artifact@v3
       with:
         name: prompter.app.zip
