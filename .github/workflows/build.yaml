@@ -12,11 +12,8 @@ jobs:
       with:
         python-version: "3.10"
 
-    - name: install binary dependencies
-      run: brew install ffmpeg
-
-    - name: install python dependencies
-      run: pip install -r requirements.txt pyinstaller
+    - run: brew install portaudio
+    - run: pip install -r requirements.txt pyinstaller
 
     - name: build .app
       run: pyinstaller app-macos.spec
