@@ -2,8 +2,8 @@ import html
 from pathlib import Path
 from typing import Optional
 
-from pydub import AudioSegment
-from pydub.playback import play
+import sounddevice as sd
+import soundfile as sf
 from PySide6.QtCore import Qt, Signal, Slot
 from PySide6.QtGui import QIcon, QIntValidator
 from PySide6.QtWidgets import (QFileDialog, QFrame, QHBoxLayout, QLabel,
@@ -149,8 +149,9 @@ class PromptView(QWidget):
     def play_cue(self) -> None:
         root_path = Path(__file__).parent
         cue_path = Path(root_path, "resources", "sounds", "beep.wav")
-        cue = AudioSegment.from_wav(str(cue_path))
-        play(cue)
+        cue, _ = sf.read(cue_path)
+        sd.play(cue)
+        sd.wait()
 
     @Slot()
     def update_ui(self) -> None:
