@@ -18,3 +18,7 @@ jobs:
 
     - run: pip install -r requirements.txt pyinstaller
     - run: pyinstaller app-macos.spec
+    - uses: actions/upload-artifact@v3
+      with:
+        name: bundle
+        path: dist/prompter.app
