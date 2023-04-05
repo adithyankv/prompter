@@ -64,12 +64,14 @@ class PromptList(QObject):
         if mime_type not in spreadsheet_mimetypes:
             raise MimeTypeError("Invalid filetype for spreadsheet")
 
-        workbook = openpyxl.load_workbook(prompts_path, read_only=True)
+        workbook = openpyxl.load_workbook(prompts_path, read_only=False)
         sheet = workbook.active
 
         for row in sheet:
             if len(row) >= 2:
                 id, prompt = row[0], row[1]
+                if id.value is None or prompt.value is None:
+                    continue
                 prompt = Prompt(id.value, prompt.value)
                 self.prompts.append(prompt)
 
